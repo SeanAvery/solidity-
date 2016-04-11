@@ -48,6 +48,7 @@ contract subCurrency {
     
     function sendRating(address _identification, uint rating) returns(uint) {
         citizens[_identification].reputation += rating; 
+        return citizens[_identification].reputation;
     }
     
     
