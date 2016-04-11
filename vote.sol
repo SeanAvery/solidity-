@@ -64,6 +64,8 @@ contract vote {
         Voters[msg.sender].voted = true;
         Voters[msg.sender].weight -= 1;
     }
+    
+    // allow individuals to cast vote
     function vote(uint proposal, uint weight) {
         // check to see if already voted
         if (Voters[msg.sender].voted) {
@@ -80,5 +82,17 @@ contract vote {
         Voters[msg.sender].vote = proposal;
         Voters[msg.sender].weight -= weight;
     }
-    
+    // look for the winning proposal 
+    function countVote() constant returns(uint prop, uint winningTally) {
+        uint propCounter; 
+        uint maxCounter = 0;
+        for (uint i = 0; i < Proposals.length; i++) {
+            if (Proposals[i].voteTally >= maxCounter) {
+                propCounter = i;
+                maxCounter = Proposals[i].voteTally;
+            }
+        }
+        
+        return (propCounter, maxCounter);
+    }
 }
