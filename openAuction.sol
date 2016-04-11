@@ -10,7 +10,7 @@ contract openAuction {
     uint public highestBid;
     
     // bool for end of auction
-    bool public auctionEnd;
+    bool public ended;
     
     // events that will be fired on changes
     event highestBidIncrease(address bidder, uint amount);
@@ -38,5 +38,18 @@ contract openAuction {
         highestBidIncrease(msg.sender, amount);
     }
     
-    
+    // function to end auction
+    function auctionEnd() {
+        if (now <= auctionStart + auctionTime) throw;
+        if (msg.value <= highestBid) {
+            throw;
+        }
+        
+        // fire auction ending event
+        auctionEnding(highestBidder, highestBid);
+        benificiary.send(this.balance);
+        
+        // change ended bool
+        ended = true;
+    }
 }
