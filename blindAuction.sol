@@ -58,8 +58,13 @@ contract BlindAuction {
         
         // initialize refund variable
         uint refund;
+        
         for (uint i = 0; i < length; i ++) {
-            
+            var bid = Bids[msg.sender][i];
+            var (amounts, fake, secrets) = (_amounts, _fake, _secrets);
+            if (bid.blindedBid != sha3(amounts, fake, secrets)) {
+                throw;
+            }
         }
     }
     
