@@ -14,6 +14,9 @@ contract BlindAuction {
     uint public reveal;
     bool public ended;
     
+    uint public highestBid;
+    address public highestBidder;
+    
     mapping(address=>Bid[]) public Bids;
     
     // event for the end of auction
@@ -63,10 +66,44 @@ contract BlindAuction {
             var bid = Bids[msg.sender][i];
             var (amounts, fake, secrets) = (_amounts, _fake, _secrets);
             if (bid.blindedBid != sha3(amounts, fake, secrets)) {
-                throw;
+                continue;
             }
+            refund += bid.deposit;
         }
+        msg.sender.send(refund);
     }
     
+    // keep track of highest bid 
+    function placeBid(address bidder, uint value) internal 
+    returns (bool success)
+    {
+        if(value <= highestBid) {
+            return false;
+        }   
+        else {
+            highestBidder.send(highestBid);
+            highestBid = value;
+            highestBidder = bidder;
+            return true;
+        }
+    }
+    // end the auction and send the highest bid to benificiary
+    function end() 
+    // check that it is after reveal time
+    afterTime(reveal)
+    {
+        // fire event
+        auctionEnded(highestBidder, highestBid);
+        // send funds to benificiary 
+        beneficiary.send(this.balance);
+
+        ended = true;
+    }
     
+    function () {
+        throw;
+    }
 }
+
+
+
