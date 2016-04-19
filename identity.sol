@@ -29,5 +29,21 @@ contract Identity {
         _
     }
     
-    // 
+    // add account if identity is verified
+    function addAccount(address newAccount) 
+    verifyAccount(msg.sender)
+    {
+        accounts.push(account({
+            acountAddress : newAccount
+        }));
+    }
+    
+    function authorizeMiddleWare(address newExtension) 
+    verifyAccount(msg.sender)
+    {
+        middleWareList.push(middleWare({
+            contractAddress : newExtension
+        }));
+    }
+    
 }
