@@ -20,7 +20,7 @@ contract Identity {
         _ 
     }
     
-    modifier verifyMiddlewear(address _middleWare) {
+    modifier verifyMiddleware(address _middleWare) {
         bool verified = false;
         for(uint i=0; i<middleWareList.length; i++) {
             if (middleWareList[i].contractAddress == _middleWare) verified = true;
@@ -45,5 +45,22 @@ contract Identity {
             contractAddress : newExtension
         }));
     }
-    
 }
+
+
+
+contract contractSpecs is Identity {
+    
+    event contractSpec(address indexed from, address indexed to, address indexed shaCheck);
+    
+    function sendSpec(bool sendSpec, address sendAddress, address _shaCheck) 
+    // verifyMiddleware(address contractAddress)
+    verifyAccount(sendAddress)
+    {
+        if(!sendSpec) throw;
+        
+        contractSpec(msg.sender, sendAddress, _shaCheck);
+    }
+}
+
+
